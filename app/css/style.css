@@ -33,14 +33,31 @@ html, body, *{
 
 .square {
   width: 8.75rem;
-  background-color: white
+  background-color: white;
+  position: relative;
+  align-items: center;
 }
 .square1 {
   width: 8.75rem;
   background-color: darksalmon;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .bottom15{
   height: 15rem;
   
+}
+
+
+
+/* --------pieces-------- */
+
+.piece{
+  height:100%;
+  width:100%;
+  position: absolute;
+  z-index: 10;
 }

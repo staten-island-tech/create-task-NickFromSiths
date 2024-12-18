@@ -100,55 +100,30 @@ const chessPieces = [
   },
 ];
 
-const chessPiecesImg = [
-  {
-    blackp:
-      "https://upload.wikimedia.org/wikipedia/commons/c/cd/Chess_pdt60.png",
-  },
-  {
-    whitep:
-      "https://upload.wikimedia.org/wikipedia/commons/0/04/Chess_plt60.png",
-  },
-  {
-    blackr:
-      "https://upload.wikimedia.org/wikipedia/commons/a/a0/Chess_rdt60.png",
-  },
-  {
-    whiter:
-      "https://upload.wikimedia.org/wikipedia/commons/5/5c/Chess_rlt60.png",
-  },
-  {
-    blackk:
-      "https://upload.wikimedia.org/wikipedia/commons/f/f1/Chess_ndt60.png",
-  },
-  {
-    whitek:
-      "https://upload.wikimedia.org/wikipedia/commons/2/28/Chess_nlt60.png",
-  },
-  {
-    blackb:
-      "https://upload.wikimedia.org/wikipedia/commons/8/81/Chess_bdt60.png",
-  },
-  {
-    whiteb:
-      "https://upload.wikimedia.org/wikipedia/commons/9/9b/Chess_blt60.png",
-  },
-  {
-    blackq:
-      "https://upload.wikimedia.org/wikipedia/commons/a/af/Chess_qdt60.png",
-  },
-  {
-    whiteq:
-      "https://upload.wikimedia.org/wikipedia/commons/4/49/Chess_qlt60.png",
-  },
-  {
-    blackK:
-      "https://upload.wikimedia.org/wikipedia/commons/e/e3/Chess_kdt60.png",
-  },
-  {
-    whiteK:
-      "https://upload.wikimedia.org/wikipedia/commons/3/3b/Chess_klt60.png",
-  },
-];
+const chessPiecesImg = {
+  blackp: "https://upload.wikimedia.org/wikipedia/commons/c/cd/Chess_pdt60.png",
+
+  whitep: "https://upload.wikimedia.org/wikipedia/commons/0/04/Chess_plt60.png",
+
+  blackr: "https://upload.wikimedia.org/wikipedia/commons/a/a0/Chess_rdt60.png",
+
+  whiter: "https://upload.wikimedia.org/wikipedia/commons/5/5c/Chess_rlt60.png",
+
+  blackk: "https://upload.wikimedia.org/wikipedia/commons/f/f1/Chess_ndt60.png",
+
+  whitek: "https://upload.wikimedia.org/wikipedia/commons/2/28/Chess_nlt60.png",
+
+  blackb: "https://upload.wikimedia.org/wikipedia/commons/8/81/Chess_bdt60.png",
+
+  whiteb: "https://upload.wikimedia.org/wikipedia/commons/9/9b/Chess_blt60.png",
+
+  blackq: "https://upload.wikimedia.org/wikipedia/commons/a/af/Chess_qdt60.png",
+
+  whiteq: "https://upload.wikimedia.org/wikipedia/commons/4/49/Chess_qlt60.png",
+
+  blackK: "https://upload.wikimedia.org/wikipedia/commons/e/e3/Chess_kdt60.png",
+
+  whiteK: "https://upload.wikimedia.org/wikipedia/commons/3/3b/Chess_klt60.png",
+};
 export { chessPieces };
 export { chessPiecesImg };
