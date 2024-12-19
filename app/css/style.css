@@ -1,10 +1,9 @@
-html, body, *{
+html, body, * {
   font-size: 10px;
   padding: 0;
   margin: 0;
   box-sizing: border-box;
 }
-
 
 .screen {
   display: flex;
@@ -16,8 +15,7 @@ html, body, *{
   height: 15rem;
 }
 
-
-.middle70{
+.middle70 {
   height: 70rem;
   display: flex;
   flex-direction: column;
@@ -31,33 +29,45 @@ html, body, *{
   flex-direction: row;
 }
 
+.square, .square1 {
+  width: 8.75rem;
+  position: relative;
+  z-index: 2;  /* Pieces above the numbers */
+}
+
 .square {
-  width: 8.75rem;
   background-color: white;
-  position: relative;
-  align-items: center;
 }
+
 .square1 {
-  width: 8.75rem;
   background-color: darksalmon;
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 
-.bottom15{
+.back1{
+  position: absolute;
+  z-index: 1; 
+  font-size: 12px; 
+  top: 4%;
+  left: 4%;
+  font: 700;
+}
+.back {
+  position: absolute;
+  z-index: 1; 
+  font-size: 12px; 
+  bottom: 4%;
+  right: 4%;
+  font: 700;
+}
+
+.bottom15 {
   height: 15rem;
-  
 }
-
-
 
 /* --------pieces-------- */
-
-.piece{
-  height:100%;
-  width:100%;
-  position: absolute;
-  z-index: 10;
+.piece {
+  height: 100%;
+  width: 100%;
+  z-index: 3;  /* Ensure pieces are above both square and back */
+  position: absolute; /* Position absolutely inside the square */
 }

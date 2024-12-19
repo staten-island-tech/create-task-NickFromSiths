@@ -5,14 +5,14 @@ import { chessPiecesImg } from "./pieces.js";
 const DOMSelectors = {
   container: document.querySelector(".container"),
   board: document.querySelector(".middle70"),
-  a: document.querySelector("#a"),
-  b: document.querySelector("#b"),
-  c: document.querySelector("#c"),
-  d: document.querySelector("#d"),
-  e: document.querySelector("#e"),
-  f: document.querySelector("#f"),
-  g: document.querySelector("#g"),
-  h: document.querySelector("#h"),
+  z1: document.querySelector("#z1"),
+  z2: document.querySelector("#z2"),
+  z3: document.querySelector("#z3"),
+  z4: document.querySelector("#z4"),
+  z5: document.querySelector("#z5"),
+  z6: document.querySelector("#z6"),
+  z7: document.querySelector("#z7"),
+  z8: document.querySelector("#z8"),
 };
 function testinput() {
   chessPieces.forEach((element) => {
@@ -31,9 +31,33 @@ function resetboard() {
   //   `<img src="${chessPiecesImg.whitep}" alt="">`
   // );
 
-  a.querySelector("#a1").insertAdjacentHTML(
+  z1.querySelector("#b1").insertAdjacentHTML(
     "beforeend",
-    `<img class="piece" src="${chessPiecesImg.whitep}" alt="paw">`
+    `<img class="piece" src="${chessPiecesImg.whitek}" alt="paw">`
+  );
+  z1.querySelector("#b1").insertAdjacentHTML(
+    "beforeend",
+    `<img class="piece" src="${chessPiecesImg.whitek}" alt="paw">`
+  );
+  z1.querySelector("#b1").insertAdjacentHTML(
+    "beforeend",
+    `<img class="piece" src="${chessPiecesImg.whitek}" alt="paw">`
+  );
+  z1.querySelector("#b1").insertAdjacentHTML(
+    "beforeend",
+    `<img class="piece" src="${chessPiecesImg.whitek}" alt="paw">`
+  );
+  z1.querySelector("#b1").insertAdjacentHTML(
+    "beforeend",
+    `<img class="piece" src="${chessPiecesImg.whitek}" alt="paw">`
+  );
+  z1.querySelector("#b1").insertAdjacentHTML(
+    "beforeend",
+    `<img class="piece" src="${chessPiecesImg.whitek}" alt="paw">`
+  );
+  z1.querySelector("#b1").insertAdjacentHTML(
+    "beforeend",
+    `<img class="piece" src="${chessPiecesImg.whitek}" alt="paw">`
   );
 }
 resetboard();
