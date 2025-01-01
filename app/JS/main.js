@@ -14,131 +14,136 @@ const DOMSelectors = {
   z7: document.querySelector("#z7"),
   z8: document.querySelector("#z8"),
 };
-function testinput() {
-  chessPieces.forEach((element) => {
-    DOMSelectors.container.insertAdjacentHTML(
-      "beforeend",
-      `<img src="${element.img}" alt="">`
-    );
-  });
-}
-testinput();
 
 function resetboard() {
-  const wRook = z1.querySelectorAll("#a1, #h1");
-  wRook.forEach((element) => {
-    element.innerHTML = "";
+  const wRook = DOMSelectors.z1.querySelectorAll("#x11, #x81");
+  wRook.forEach((element, index) => {
     element.insertAdjacentHTML(
       "beforeend",
-      `<img class="piece" src="${chessPiecesImg.whiter}" alt="paw">`
+      `<img class="piece" id="wr${index}" src="${chessPiecesImg.whiter}" draggable="true" alt="rook">`
     );
   });
 
-  const wKnight = z1.querySelectorAll("#b1, #g1");
-  wKnight.forEach((element) => {
-    element.innerHTML = "";
+  const wKnight = DOMSelectors.z1.querySelectorAll("#x21, #x71");
+  wKnight.forEach((element, index) => {
     element.insertAdjacentHTML(
       "beforeend",
-      `<img class="piece" src="${chessPiecesImg.whitek}" alt="paw">`
+      `<img class="piece" id="wk${index}" src="${chessPiecesImg.whitek}" draggable="true" alt="knight">`
     );
   });
 
-  const wBishop = z1.querySelectorAll("#c1, #f1");
-  wBishop.forEach((element) => {
-    element.innerHTML = "";
+  const wBishop = DOMSelectors.z1.querySelectorAll("#x31, #x61");
+  wBishop.forEach((element, index) => {
     element.insertAdjacentHTML(
       "beforeend",
-      `<img class="piece" src="${chessPiecesImg.whiteb}" alt="paw">`
+      `<img class="piece" id="wb${index}" src="${chessPiecesImg.whiteb}" draggable="true" alt="bishop">`
     );
   });
 
-  z1.querySelector("#d1").insertAdjacentHTML(
-    "beforeend",
-    `<img class="piece" src="${chessPiecesImg.whiteK}" alt="paw">`
+  DOMSelectors.z1
+    .querySelector("#x41")
+    .insertAdjacentHTML(
+      "beforeend",
+      `<img class="piece" id="wK" src="${chessPiecesImg.whiteK}" draggable="true" alt="king">`
+    );
+  DOMSelectors.z1
+    .querySelector("#x51")
+    .insertAdjacentHTML(
+      "beforeend",
+      `<img class="piece" id="wq" src="${chessPiecesImg.whiteq}" draggable="true" alt="queen">`
+    );
+
+  const wPawn = DOMSelectors.z2.querySelectorAll(
+    "#x12, #x22, #x32, #x42, #x52, #x62, #x72, #x82"
   );
-  z1.querySelector("#e1").insertAdjacentHTML(
-    "beforeend",
-    `<img class="piece" src="${chessPiecesImg.whiteq}" alt="paw">`
+  wPawn.forEach((element, index) => {
+    element.insertAdjacentHTML(
+      "beforeend",
+      `<img class="piece" id="wp${index}" src="${chessPiecesImg.whitep}" draggable="true" alt="pawn">`
+    );
+  });
+
+  const bRook = DOMSelectors.z8.querySelectorAll("#x18, #x88");
+  bRook.forEach((element, index) => {
+    element.insertAdjacentHTML(
+      "beforeend",
+      `<img class="piece" id="br${index}" src="${chessPiecesImg.blackr}" draggable="true" alt="rook">`
+    );
+  });
+
+  const bKnight = DOMSelectors.z8.querySelectorAll("#x28, #x78");
+  bKnight.forEach((element, index) => {
+    element.insertAdjacentHTML(
+      "beforeend",
+      `<img class="piece" id="bk${index}" src="${chessPiecesImg.blackk}" draggable="true" alt="knight">`
+    );
+  });
+
+  const bBishop = DOMSelectors.z8.querySelectorAll("#x38, #x68");
+  bBishop.forEach((element, index) => {
+    element.insertAdjacentHTML(
+      "beforeend",
+      `<img class="piece" id="bb${index}" src="${chessPiecesImg.blackb}" draggable="true" alt="bishop">`
+    );
+  });
+
+  DOMSelectors.z8
+    .querySelector("#x48")
+    .insertAdjacentHTML(
+      "beforeend",
+      `<img class="piece" id="bK" src="${chessPiecesImg.blackK}" draggable="true" alt="king">`
+    );
+  DOMSelectors.z8
+    .querySelector("#x58")
+    .insertAdjacentHTML(
+      "beforeend",
+      `<img class="piece" id="bq" src="${chessPiecesImg.blackq}" draggable="true" alt="queen">`
+    );
+
+  const bPawn = DOMSelectors.z7.querySelectorAll(
+    "#x17, #x27, #x37, #x47, #x57, #x67, #x77, #x87"
   );
-
-  const wPawn = z2.querySelectorAll("#a2, #b2, #c2, #d2, #e2, #f2, #g2, #h2");
-  wPawn.forEach((element) => {
-    element.innerHTML = "";
+  bPawn.forEach((element, index) => {
     element.insertAdjacentHTML(
       "beforeend",
-      `<img class="piece" src="${chessPiecesImg.whitep}" alt="paw">`
+      `<img class="piece" id="bp${index}" src="${chessPiecesImg.blackp}" draggable="true" alt="pawn">`
     );
   });
 
-  const bRook = z8.querySelectorAll("#a8, #h8");
-  bRook.forEach((element) => {
-    element.innerHTML = "";
-    element.insertAdjacentHTML(
-      "beforeend",
-      `<img class="piece" src="${chessPiecesImg.blackr}" alt="paw">`
-    );
-  });
-
-  const bKnight = z8.querySelectorAll("#b8, #g8");
-  bKnight.forEach((element) => {
-    element.innerHTML = "";
-    element.insertAdjacentHTML(
-      "beforeend",
-      `<img class="piece" src="${chessPiecesImg.blackk}" alt="paw">`
-    );
-  });
-
-  const bBishop = z8.querySelectorAll("#c8, #f8");
-  bBishop.forEach((element) => {
-    element.innerHTML = "";
-    element.insertAdjacentHTML(
-      "beforeend",
-      `<img class="piece" src="${chessPiecesImg.blackb}" alt="paw">`
-    );
-  });
-
-  z8.querySelector("#d8").insertAdjacentHTML(
-    "beforeend",
-    `<img class="piece" src="${chessPiecesImg.blackK}" alt="paw">`
-  );
-  z8.querySelector("#e8").insertAdjacentHTML(
-    "beforeend",
-    `<img class="piece" src="${chessPiecesImg.blackq}" alt="paw">`
-  );
-
-  const bPawn = z7.querySelectorAll("#a7, #b7, #c7, #d7, #e7, #f7, #g7, #h7");
-  bPawn.forEach((element) => {
-    element.innerHTML = "";
-    element.insertAdjacentHTML(
-      "beforeend",
-      `<img class="piece" src="${chessPiecesImg.blackp}" alt="paw">`
-    );
-  });
+  function clear() {
+    const allsquares = DOMSelectors.board.querySelectorAll("#square, #square1");
+    allsquares.forEach((element) => {
+      element.innerHTML = "";
+    });
+  }
+  clear();
 }
-
 resetboard();
 
-//tests
+const piece = document.querySelectorAll(".piece");
+const squares = document.querySelectorAll(".square, .square1");
 
-// function resetboard() {
-//   // const wp = DOMSelectors.board.b.querySelectorAll(".square", ".square1");
-//   // wp.querySelector("#b1").insertAdjacentHTML(
-//   //   "beforeend",
-//   //   `<img src="${chessPiecesImg.whitep}" alt="">`
-//   // );
+piece.forEach((element) => {
+  element.addEventListener("dragstart", drag);
+});
 
-//   // z1.querySelector("#b1", "#g1").insertAdjacentHTML(
-//   //   "beforeend",
-//   //   `<img class="piece" src="${chessPiecesImg.whitek}" alt="paw">`
-//   // );
+function drag(event) {
+  event.dataTransfer.setData("text", event.target.id);
+}
 
-//   // Assuming z1 is a parent element and you want to modify #b1 and #g1
+squares.forEach((element) => {
+  element.addEventListener("dragover", dragover);
+  element.addEventListener("drop", drop);
+});
 
-//   // const elements = z1.querySelectorAll("#b1, #g1"); // Select both #b1 and #g1
-//   // elements.forEach((element) => {
-//   //   element.insertAdjacentHTML(
-//   //     "beforeend",
-//   //     `<img class="piece" src="${chessPiecesImg.whitek}" alt="pawn">`
-//   //   );
-//   // });
-// }
+function dragover(event) {
+  event.preventDefault();
+}
+
+function drop(event) {
+  event.preventDefault();
+  let data = event.dataTransfer.getData("text");
+  const piece = document.getElementById(data);
+  const target = event.currentTarget;
+  target.appendChild(piece);
+}

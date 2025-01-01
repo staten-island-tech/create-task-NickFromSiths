@@ -1,4 +1,6 @@
-html, body, * {
+html,
+body,
+* {
   font-size: 10px;
   padding: 0;
   margin: 0;
@@ -29,10 +31,13 @@ html, body, * {
   flex-direction: row;
 }
 
-.square, .square1 {
+.square,
+.square1,
+.template {
   width: 8.75rem;
+  height: 8.75rem;
   position: relative;
-  z-index: 2;  /* Pieces above the numbers */
+  z-index: 1; /* Pieces above the numbers */
 }
 
 .square {
@@ -43,18 +48,18 @@ html, body, * {
   background-color: darksalmon;
 }
 
-.back1{
+.back1 {
   position: absolute;
-  z-index: 1; 
-  font-size: 12px; 
+  z-index: 2;
+  font-size: 12px;
   top: 4%;
   left: 4%;
   font: 700;
 }
 .back {
   position: absolute;
-  z-index: 1; 
-  font-size: 12px; 
+  z-index: 2;
+  font-size: 12px;
   bottom: 4%;
   right: 4%;
   font: 700;
@@ -68,6 +73,7 @@ html, body, * {
 .piece {
   height: 100%;
   width: 100%;
-  z-index: 3;  /* Ensure pieces are above both square and back */
+  z-index: 3; /* Ensure pieces are above both square and back */
   position: absolute; /* Position absolutely inside the square */
+  cursor: grab;
 }
