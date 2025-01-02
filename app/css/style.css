@@ -70,7 +70,7 @@ body,
 }
 
 /* --------pieces-------- */
-.piece {
+.piece, .whitepiece {
   height: 100%;
   width: 100%;
   z-index: 3; /* Ensure pieces are above both square and back */

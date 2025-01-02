@@ -20,7 +20,7 @@ function resetboard() {
   wRook.forEach((element, index) => {
     element.insertAdjacentHTML(
       "beforeend",
-      `<img class="piece" id="wr${index}" src="${chessPiecesImg.whiter}" draggable="true" alt="rook">`
+      `<img class="whitepiece" id="wr${index}" src="${chessPiecesImg.whiter}" draggable="true" alt="rook">`
     );
   });
 
@@ -28,7 +28,7 @@ function resetboard() {
   wKnight.forEach((element, index) => {
     element.insertAdjacentHTML(
       "beforeend",
-      `<img class="piece" id="wk${index}" src="${chessPiecesImg.whitek}" draggable="true" alt="knight">`
+      `<img class="whitepiece" id="wk${index}" src="${chessPiecesImg.whitek}" draggable="true" alt="knight">`
     );
   });
 
@@ -36,21 +36,21 @@ function resetboard() {
   wBishop.forEach((element, index) => {
     element.insertAdjacentHTML(
       "beforeend",
-      `<img class="piece" id="wb${index}" src="${chessPiecesImg.whiteb}" draggable="true" alt="bishop">`
+      `<img class="whitepiece" id="wb${index}" src="${chessPiecesImg.whiteb}" draggable="true" alt="bishop">`
     );
   });
 
   DOMSelectors.z1
-    .querySelector("#x41")
-    .insertAdjacentHTML(
-      "beforeend",
-      `<img class="piece" id="wK" src="${chessPiecesImg.whiteK}" draggable="true" alt="king">`
-    );
-  DOMSelectors.z1
     .querySelector("#x51")
     .insertAdjacentHTML(
       "beforeend",
-      `<img class="piece" id="wq" src="${chessPiecesImg.whiteq}" draggable="true" alt="queen">`
+      `<img class="whitepiece" id="wK" src="${chessPiecesImg.whiteK}" draggable="true" alt="king">`
+    );
+  DOMSelectors.z1
+    .querySelector("#x41")
+    .insertAdjacentHTML(
+      "beforeend",
+      `<img class="whitepiece" id="wq" src="${chessPiecesImg.whiteq}" draggable="true" alt="queen">`
     );
 
   const wPawn = DOMSelectors.z2.querySelectorAll(
@@ -59,7 +59,7 @@ function resetboard() {
   wPawn.forEach((element, index) => {
     element.insertAdjacentHTML(
       "beforeend",
-      `<img class="piece" id="wp${index}" src="${chessPiecesImg.whitep}" draggable="true" alt="pawn">`
+      `<img class="whitepiece" id="wp${index}" src="${chessPiecesImg.whitep}" draggable="true" alt="pawn">`
     );
   });
 
@@ -88,13 +88,13 @@ function resetboard() {
   });
 
   DOMSelectors.z8
-    .querySelector("#x48")
+    .querySelector("#x58")
     .insertAdjacentHTML(
       "beforeend",
       `<img class="piece" id="bK" src="${chessPiecesImg.blackK}" draggable="true" alt="king">`
     );
   DOMSelectors.z8
-    .querySelector("#x58")
+    .querySelector("#x48")
     .insertAdjacentHTML(
       "beforeend",
       `<img class="piece" id="bq" src="${chessPiecesImg.blackq}" draggable="true" alt="queen">`
@@ -120,7 +120,9 @@ function resetboard() {
 }
 resetboard();
 
-const piece = document.querySelectorAll(".piece");
+// moving squares -------------------------------------------------------------------------------
+
+const piece = document.querySelectorAll(".piece, .whitepiece");
 const squares = document.querySelectorAll(".square, .square1");
 
 piece.forEach((element) => {
@@ -145,5 +147,19 @@ function drop(event) {
   let data = event.dataTransfer.getData("text");
   const piece = document.getElementById(data);
   const target = event.currentTarget;
-  target.appendChild(piece);
+  if ((piece.className = "whitepiece")) {
+    console.log("yes");
+  } else if ((piece.className = "piece")) {
+    console.log("no");
+  }
+
+  if (turn % 2 === 0) {
+    target.appendChild(piece);
+    turn++;
+  } else if (turn % 2 != 0) {
+  }
 }
+
+let turn = 0;
+
+// ----------------------------------------------------------------------------------------
