@@ -129,7 +129,10 @@ piece.forEach((element) => {
   element.addEventListener("dragstart", drag);
 });
 
+let originalsquare = null;
+
 function drag(event) {
+  originalsquare = event.target.parentElement.id;
   event.dataTransfer.setData("text", event.target.id);
 }
 
@@ -142,24 +145,34 @@ function dragover(event) {
   event.preventDefault();
 }
 
-function drop(event) {
-  event.preventDefault();
-  let data = event.dataTransfer.getData("text");
-  const piece = document.getElementById(data);
-  const target = event.currentTarget;
-  if ((piece.className = "whitepiece")) {
-    console.log("yes");
-  } else if ((piece.className = "piece")) {
-    console.log("no");
-  }
-
-  if (turn % 2 === 0) {
-    target.appendChild(piece);
-    turn++;
-  } else if (turn % 2 != 0) {
-  }
-}
-
 let turn = 0;
 
+function drop(event) {
+  event.preventDefault();
+  const piece = document.getElementById(event.dataTransfer.getData("text"));
+  const target = event.currentTarget;
+
+  if (turn % 2 === 0) {
+    if (piece.className === "whitepiece") {
+      if (target.id !== originalsquare) {
+        if (!target.children.includes(".whitepiece")) {
+          console.log(target.id);
+          console.log(originalsquare);
+          target.appendChild(piece);
+          turn++;
+        }
+      }
+    }
+  } else if (turn % 2 != 0) {
+    if (piece.className === "piece") {
+      if (target.id !== originalsquare) {
+        console.log(target.id);
+        console.log(originalsquare);
+        target.appendChild(piece);
+        turn++;
+      }
+    }
+  }
+}
+// && target.includes(".piece")
 // ----------------------------------------------------------------------------------------

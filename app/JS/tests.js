@@ -12,6 +12,25 @@ let sortX = [...x].sort();
 let sortY = [...y].sort();
 
 for (let i = 0; i < sortX.length; i++) {}
+
+if (turn % 2 === 0) {
+  if (piece.className === "whitepiece") {
+    target.appendChild(piece);
+    turn++;
+    console.log("yes");
+  } else if (piece.className === "piece") {
+    console.log("no");
+  }
+} else if (turn % 2 != 0) {
+  if (piece.className === "piece") {
+    target.appendChild(piece);
+    turn++;
+    console.log("yes");
+  } else if (piece.className === "whitepiece") {
+    console.log("no");
+  }
+}
+
 //tests
 
 // function resetboard() {
