@@ -31,6 +31,8 @@ if (turn % 2 === 0) {
   }
 }
 
+// && target.includes(".piece")
+
 //tests
 
 // function resetboard() {

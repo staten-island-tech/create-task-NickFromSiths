@@ -152,27 +152,51 @@ function drop(event) {
   const piece = document.getElementById(event.dataTransfer.getData("text"));
   const target = event.currentTarget;
 
+  function piecelogic() {
+    console.log(turn + 1);
+    console.log("from", target.id);
+    console.log("to", originalsquare);
+    target.innerHTML = "";
+    target.appendChild(piece);
+    turn++;
+  }
+
   if (turn % 2 === 0) {
     if (piece.className === "whitepiece") {
       if (target.id !== originalsquare) {
-        if (!target.children.includes(".whitepiece")) {
-          console.log(target.id);
-          console.log(originalsquare);
-          target.appendChild(piece);
-          turn++;
+        const squarechild = target.firstElementChild;
+        if (!squarechild || !squarechild.classList.contains("whitepiece")) {
+          const captured = Array.from(target.children);
+          piecelogic();
+          if (squarechild) {
+            if (squarechild.classList.contains("piece")) {
+              console.log(captured, "black piece captured");
+            }
+          }
+        } else {
+          console.log(target.id, "contains same piece color");
         }
       }
     }
   } else if (turn % 2 != 0) {
     if (piece.className === "piece") {
       if (target.id !== originalsquare) {
-        console.log(target.id);
-        console.log(originalsquare);
-        target.appendChild(piece);
-        turn++;
+        const squarechild = target.firstElementChild;
+        if (!squarechild || !squarechild.classList.contains("piece")) {
+          const captured = Array.from(target.children);
+          piecelogic();
+
+          if (squarechild) {
+            if (squarechild.classList.contains("whitepiece")) {
+              console.log(captured, "white piece captured");
+            }
+          }
+        } else {
+          console.log(target.id, "contains same piece color");
+        }
       }
     }
   }
 }
-// && target.includes(".piece")
-// ----------------------------------------------------------------------------------------
+
+// -------Legal Move Computation
