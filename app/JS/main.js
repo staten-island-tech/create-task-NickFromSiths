@@ -200,3 +200,6 @@ function drop(event) {
 }
 
 // -------Legal Move Computation
+let legalmoves = [];
+
+function pawn() {}
