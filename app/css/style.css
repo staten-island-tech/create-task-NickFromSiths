@@ -5,12 +5,13 @@ body,
   padding: 0;
   margin: 0;
   box-sizing: border-box;
+  
 }
 
 .screen {
   display: flex;
   flex-direction: column;
-  background-color: grey;
+  background-color: rgb(83, 83, 83);
 }
 
 .top15 {
@@ -42,10 +43,19 @@ body,
 
 .square {
   background-color: white;
+  /* background-image: url(https://img.freepik.com/free-vector/clean-white-marble-texture-banner_1017-37164.jpg);
+  background-size: cover; 
+  background-position: center; 
+  background-repeat: no-repeat; */
 }
 
 .square1 {
-  background-color: darksalmon;
+  background-image: url(https://static.vecteezy.com/system/resources/previews/018/910/484/non_2x/ice-cubes-background-ice-cube-texture-or-background-it-makes-me-feel-fresh-and-feel-good-in-the-summer-ice-and-cold-drinks-will-make-us-feel-relaxed-made-for-beverage-or-refreshment-business-free-photo.jpg);
+  background-color: rgba(144, 222, 255, 0.978);
+  /* background-size: cover; 
+  background-position: center; 
+  background-repeat: no-repeat; */
+  background-size: 1277%;
 }
 
 .back1 {

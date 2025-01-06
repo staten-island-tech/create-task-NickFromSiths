@@ -176,6 +176,8 @@ function drop(event) {
         } else {
           console.log(target.id, "contains same piece color");
         }
+      } else {
+        console.log("cannot move to same square");
       }
     }
   } else if (turn % 2 != 0) {
@@ -194,6 +196,8 @@ function drop(event) {
         } else {
           console.log(target.id, "contains same piece color");
         }
+      } else {
+        console.log("cannot move to same square");
       }
     }
   }
