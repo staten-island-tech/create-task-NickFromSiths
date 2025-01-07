@@ -160,10 +160,12 @@ function drop(event) {
     target.appendChild(piece);
     turn++;
   }
+  //after computing legal moves delete target.id and move it out of drop()
+  let legalmoves = [target.id];
 
   if (turn % 2 === 0) {
     if (piece.className === "whitepiece") {
-      if (target.id !== originalsquare) {
+      if (target.id !== originalsquare && legalmoves.includes(target.id)) {
         const squarechild = target.firstElementChild;
         if (!squarechild || !squarechild.classList.contains("whitepiece")) {
           const captured = Array.from(target.children);
@@ -176,6 +178,8 @@ function drop(event) {
         } else {
           console.log(target.id, "contains same piece color");
         }
+
+        legalmoves.length = 0;
       } else {
         console.log("cannot move to same square");
       }
@@ -204,6 +208,5 @@ function drop(event) {
 }
 
 // -------Legal Move Computation
-let legalmoves = [];
 
 function pawn() {}
