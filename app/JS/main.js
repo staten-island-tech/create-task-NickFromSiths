@@ -146,7 +146,7 @@ function dragover(event) {
 }
 
 let turn = 0;
-
+let legalmoves = [];
 function drop(event) {
   event.preventDefault();
   const piece = document.getElementById(event.dataTransfer.getData("text"));
@@ -161,11 +161,12 @@ function drop(event) {
     turn++;
   }
   //after computing legal moves delete target.id and move it out of drop()
-  let legalmoves = [target.id];
+
+  wpawn(target.id, originalsquare);
 
   if (turn % 2 === 0) {
     if (piece.className === "whitepiece") {
-      if (target.id !== originalsquare && legalmoves.includes(target.id)) {
+      if (target.id !== originalsquare) {
         const squarechild = target.firstElementChild;
         if (!squarechild || !squarechild.classList.contains("whitepiece")) {
           const captured = Array.from(target.children);
@@ -209,4 +210,21 @@ function drop(event) {
 
 // -------Legal Move Computation
 
-function pawn() {}
+function wpawn(target, original) {
+  const rank = parseInt(original.charAt(1));
+  const file = parseInt(original.charAt(2));
+  console.log(rank, file);
+  legal(rank, file);
+  function legal(r, f) {
+    const moves = [
+      { r: r + 1, f: f },
+      { r: r + 2, f: f },
+      { r: r + 1, f: f - 1 },
+      { r: r + 1, f: f + 1 },
+    ];
+    moves.forEach(({ r, f }) => {
+      const newid = `x${r}${f}`;
+      legalmoves.push(newid);
+    });
+  }
+}
