@@ -146,7 +146,12 @@ function dragover(event) {
 }
 
 let turn = 0;
+
 let legalmoves = [];
+
+let previousoriginal = [];
+let previoustarget = [];
+
 function drop(event) {
   event.preventDefault();
   const piece = document.getElementById(event.dataTransfer.getData("text"));
@@ -154,33 +159,39 @@ function drop(event) {
 
   function piecelogic() {
     console.log(turn + 1);
-    console.log("from", target.id);
-    console.log("to", originalsquare);
+    console.log("from", originalsquare);
+    console.log("to", target.id);
     target.innerHTML = "";
     target.appendChild(piece);
     turn++;
+    previousoriginal = [];
+    previousoriginal = originalsquare;
+    previoustarget = [];
+    previoustarget = target.id;
   }
   //after computing legal moves delete target.id and move it out of drop()
-
-  wpawn(target.id, originalsquare);
 
   if (turn % 2 === 0) {
     if (piece.className === "whitepiece") {
       if (target.id !== originalsquare) {
-        const squarechild = target.firstElementChild;
-        if (!squarechild || !squarechild.classList.contains("whitepiece")) {
-          const captured = Array.from(target.children);
-          piecelogic();
-          if (squarechild) {
-            if (squarechild.classList.contains("piece")) {
-              console.log(captured, "black piece captured");
+        wpawn(target.id, originalsquare);
+        //legal moves
+        if (legalmoves.includes(`#${target.id}`)) {
+          const squarechild = target.firstElementChild;
+          if (!squarechild || !squarechild.classList.contains("whitepiece")) {
+            //detecting captures in console (not needed)----------------------------
+            const captured = Array.from(target.children); //
+            if (squarechild) {
+              if (squarechild.classList.contains("piece")) {
+                console.log(captured, "black piece captured");
+              }
             }
+            //---------------------------------
+            piecelogic();
+          } else {
+            console.log(target.id, "contains same piece color");
           }
-        } else {
-          console.log(target.id, "contains same piece color");
         }
-
-        legalmoves.length = 0;
       } else {
         console.log("cannot move to same square");
       }
@@ -188,18 +199,22 @@ function drop(event) {
   } else if (turn % 2 != 0) {
     if (piece.className === "piece") {
       if (target.id !== originalsquare) {
-        const squarechild = target.firstElementChild;
-        if (!squarechild || !squarechild.classList.contains("piece")) {
-          const captured = Array.from(target.children);
-          piecelogic();
-
-          if (squarechild) {
-            if (squarechild.classList.contains("whitepiece")) {
-              console.log(captured, "white piece captured");
+        bpawn(target.id, originalsquare);
+        if (legalmoves.includes(`#${target.id}`)) {
+          const squarechild = target.firstElementChild;
+          if (!squarechild || !squarechild.classList.contains("piece")) {
+            //detecting captures in console (not needed)----------------------------
+            const captured = Array.from(target.children); //
+            if (squarechild) {
+              if (squarechild.classList.contains("piece")) {
+                console.log(captured, "black piece captured");
+              }
             }
+            //---------------------------------
+            piecelogic();
+          } else {
+            console.log(target.id, "contains same piece color");
           }
-        } else {
-          console.log(target.id, "contains same piece color");
         }
       } else {
         console.log("cannot move to same square");
@@ -210,21 +225,139 @@ function drop(event) {
 
 // -------Legal Move Computation
 
+//WHITE PAWN
+
 function wpawn(target, original) {
-  const rank = parseInt(original.charAt(1));
-  const file = parseInt(original.charAt(2));
-  console.log(rank, file);
-  legal(rank, file);
-  function legal(r, f) {
-    const moves = [
-      { r: r + 1, f: f },
-      { r: r + 2, f: f },
-      { r: r + 1, f: f - 1 },
-      { r: r + 1, f: f + 1 },
-    ];
-    moves.forEach(({ r, f }) => {
-      const newid = `x${r}${f}`;
+  legalmoves = [];
+
+  const r = parseInt(original.charAt(1));
+  const f = parseInt(original.charAt(2));
+  //console.log("parsed ", r, f);
+
+  const move1 = [{ r: r, f: f + 1 }];
+  const move2 = [{ r: r, f: f + 2 }];
+  const captures = [
+    { r: r + 1, f: f + 1 },
+    { r: r - 1, f: f + 1 },
+  ];
+
+  move1.forEach(({ r, f }) => {
+    const newid = `#x${r}${f}`;
+    let cap = document.querySelector(newid);
+    //console.log(newid, "1");
+    if (cap && !cap.firstElementChild) {
       legalmoves.push(newid);
+    }
+  });
+  //console.log(r, "r");
+  if (f < 3 && !document.querySelector(`#x${r}${f + 1}`).firstElementChild) {
+    move2.forEach(({ r, f }) => {
+      const newid = `#x${r}${f}`;
+      let cap = document.querySelector(newid);
+      //console.log(newid, "1");
+      if (cap && !cap.firstElementChild) {
+        legalmoves.push(newid);
+      }
     });
   }
+
+  captures.forEach(({ r, f }) => {
+    const newid1 = `#x${r}${f}`;
+    let cap = document.querySelector(newid1);
+    //console.log(newid1, "1");
+    if (cap && cap.firstElementChild) {
+      legalmoves.push(newid1);
+    }
+  });
+  //en passant (add move by up by 2 rule with the previous... data)
+  //    possible best place for that is in if(f === 5 && ....){}
+  if (f === 5) {
+    if (document.querySelector(`#x${r - 1}${f}`)) {
+      const adjacent = `#x${r - 1}${f}`;
+      const adjacentPiece = document.querySelector(adjacent);
+      if (adjacentPiece && adjacentPiece.firstElementChild) {
+        legalmoves.push(`#x${r - 1}${f + 1}`);
+        if (target && legalmoves.includes(`#${target}`)) {
+          adjacentPiece.innerHTML = "";
+        }
+      }
+    }
+    if (document.querySelector(`#x${r + 1}${f}`)) {
+      const adjacent = `#x${r + 1}${f}`;
+      const adjacentPiece = document.querySelector(adjacent);
+      if (adjacentPiece && adjacentPiece.firstElementChild) {
+        legalmoves.push(`#x${r + 1}${f + 1}`);
+        if (target && legalmoves.includes(`#${target}`)) {
+          adjacentPiece.innerHTML = "";
+        }
+      }
+    }
+  }
+  //tried to make en passant but didnt work
+
+  // if (f === 5) {
+  //   const newid2 = `#x${r}${f - 1}`;
+  //   let capt = document.querySelector(newid2);
+  //   if (cap && capt && capt.firstElementChild) {
+  //     legalmoves.push(newid1);
+  //   }
+  //   if ((cap = `#${target}`)) {
+  //     capt.innerHTML = "";
+  //   }
+  // }
+
+  console.log(legalmoves);
+}
+//BLACK PAWN
+function bpawn(target, original) {
+  legalmoves = [];
+
+  const r = parseInt(original.charAt(1));
+  const f = parseInt(original.charAt(2));
+
+  const move1 = [{ r: r, f: f - 1 }];
+  const move2 = [{ r: r, f: f - 2 }];
+  const captures = [
+    { r: r + 1, f: f - 1 },
+    { r: r - 1, f: f - 1 },
+  ];
+
+  move1.forEach(({ r, f }) => {
+    const newid = `#x${r}${f}`;
+    let cap = document.querySelector(newid);
+    //console.log(newid, "1");
+    if (cap && !cap.firstElementChild) {
+      legalmoves.push(newid);
+    }
+  });
+
+  if (f > 6 && !document.querySelector(`#x${r}${f - 1}`).firstElementChild) {
+    move2.forEach(({ r, f }) => {
+      const newid = `#x${r}${f}`;
+      let cap = document.querySelector(newid);
+      //console.log(newid, "1");
+      if (cap && !cap.firstElementChild) {
+        legalmoves.push(newid);
+      }
+    });
+  }
+
+  captures.forEach(({ r, f }) => {
+    const newid1 = `#x${r}${f}`;
+    let cap = document.querySelector(newid1);
+    //console.log(newid1, "1");
+    if (cap && cap.firstElementChild) {
+      legalmoves.push(newid1);
+    }
+  });
+
+  if (f === 4) {
+    const adjacent = `#x${r}${f + 1}`;
+    const adjacentPiece = document.querySelector(adjacent);
+    if (adjacentPiece && adjacentPiece.firstElementChild) {
+      legalmoves.push(adjacent); // Add en passant move if conditions are met
+    }
+  }
+
+  console.log(legalmoves);
 }

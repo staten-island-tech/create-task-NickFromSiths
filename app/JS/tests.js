@@ -30,6 +30,36 @@ if (turn % 2 === 0) {
     console.log("no");
   }
 }
+//en passant
+
+if (f === 5) {
+  if (document.querySelector(`#x${r - 1}${f - 1}`)) {
+    const adjacent = `#x${r - 1}${f}`;
+    console.log(adjacent);
+    const adjacentPiece = document.querySelector(adjacent);
+    console.log(adjacentPiece);
+    if (adjacentPiece && adjacentPiece.firstElementChild) {
+      console.log("vrguietdyh");
+      legalmoves.push(`#x${r - 1}${f + 1}`); // Add en passant move if conditions are met
+      if (target && legalmoves.includes(`#${target}`)) {
+        adjacentPiece.innerHTML = "";
+      }
+    }
+  }
+  if (document.querySelector(`#x${r + 1}${f - 1}`)) {
+    const adjacent = `#x${r + 1}${f}`;
+    console.log(adjacent);
+    const adjacentPiece = document.querySelector(adjacent);
+    console.log(adjacentPiece);
+    if (adjacentPiece && adjacentPiece.firstElementChild) {
+      console.log("vrguietdyh");
+      legalmoves.push(`#x${r + 1}${f + 1}`); // Add en passant move if conditions are met
+      if (target && legalmoves.includes(`#${target}`)) {
+        adjacentPiece.innerHTML = "";
+      }
+    }
+  }
+}
 
 // && target.includes(".piece")
 
