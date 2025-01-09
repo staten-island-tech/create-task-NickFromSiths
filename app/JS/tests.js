@@ -87,3 +87,16 @@ if (f === 5) {
 //   //   );
 //   // });
 // }
+
+//tried to make en passant but didnt work
+
+// if (f === 5) {
+//   const newid2 = `#x${r}${f - 1}`;
+//   let capt = document.querySelector(newid2);
+//   if (cap && capt && capt.firstElementChild) {
+//     legalmoves.push(newid1);
+//   }
+//   if ((cap = `#${target}`)) {
+//     capt.innerHTML = "";
+//   }
+// }

@@ -149,8 +149,10 @@ let turn = 0;
 
 let legalmoves = [];
 
-let previousoriginal = [];
-let previoustarget = [];
+let historyoriginal = [];
+let historytarget = [];
+let previousoriginal = historyoriginal[historyoriginal.length - 2];
+let previoustarget = historytarget[historytarget.length - 2];
 
 function drop(event) {
   event.preventDefault();
@@ -164,10 +166,11 @@ function drop(event) {
     target.innerHTML = "";
     target.appendChild(piece);
     turn++;
-    previousoriginal = [];
-    previousoriginal = originalsquare;
-    previoustarget = [];
-    previoustarget = target.id;
+    historyoriginal.push(originalsquare);
+    historytarget.push(target.id);
+    console.log(historyoriginal, historytarget);
+
+    console.log(previousoriginal);
   }
   //after computing legal moves delete target.id and move it out of drop()
 
@@ -229,6 +232,7 @@ function drop(event) {
 
 function wpawn(target, original) {
   legalmoves = [];
+  console.log(previousoriginal);
 
   const r = parseInt(original.charAt(1));
   const f = parseInt(original.charAt(2));
@@ -270,41 +274,38 @@ function wpawn(target, original) {
     }
   });
   //en passant (add move by up by 2 rule with the previous... data)
-  //    possible best place for that is in if(f === 5 && ....){}
-  if (f === 5) {
-    if (document.querySelector(`#x${r - 1}${f}`)) {
-      const adjacent = `#x${r - 1}${f}`;
-      const adjacentPiece = document.querySelector(adjacent);
-      if (adjacentPiece && adjacentPiece.firstElementChild) {
-        legalmoves.push(`#x${r - 1}${f + 1}`);
-        if (target && legalmoves.includes(`#${target}`)) {
-          adjacentPiece.innerHTML = "";
+  //    possible best place for that is in if(f === 5 && ....){}\
+
+  if (previousoriginal !== undefined && previoustarget !== undefined) {
+    const pfo = parseInt(previousoriginal.charAt(2));
+    const pft = parseInt(previoustarget.charAt(2));
+    let test = pfo - pft;
+    console.log(pfo, "pfo");
+    console.log(pft, "pft");
+    console.log(test, "test");
+    if (f === 5 && test === 2) {
+      if (document.querySelector(`#x${r - 1}${f}`)) {
+        const adjacent = `#x${r - 1}${f}`;
+        const adjacentPiece = document.querySelector(adjacent);
+        if (adjacentPiece && adjacentPiece.firstElementChild) {
+          legalmoves.push(`#x${r - 1}${f + 1}`);
+          if (target && legalmoves.includes(`#${target}`)) {
+            adjacentPiece.innerHTML = "";
+          }
         }
       }
-    }
-    if (document.querySelector(`#x${r + 1}${f}`)) {
-      const adjacent = `#x${r + 1}${f}`;
-      const adjacentPiece = document.querySelector(adjacent);
-      if (adjacentPiece && adjacentPiece.firstElementChild) {
-        legalmoves.push(`#x${r + 1}${f + 1}`);
-        if (target && legalmoves.includes(`#${target}`)) {
-          adjacentPiece.innerHTML = "";
+      if (document.querySelector(`#x${r + 1}${f}`)) {
+        const adjacent = `#x${r + 1}${f}`;
+        const adjacentPiece = document.querySelector(adjacent);
+        if (adjacentPiece && adjacentPiece.firstElementChild) {
+          legalmoves.push(`#x${r + 1}${f + 1}`);
+          if (target && legalmoves.includes(`#${target}`)) {
+            adjacentPiece.innerHTML = "";
+          }
         }
       }
     }
   }
-  //tried to make en passant but didnt work
-
-  // if (f === 5) {
-  //   const newid2 = `#x${r}${f - 1}`;
-  //   let capt = document.querySelector(newid2);
-  //   if (cap && capt && capt.firstElementChild) {
-  //     legalmoves.push(newid1);
-  //   }
-  //   if ((cap = `#${target}`)) {
-  //     capt.innerHTML = "";
-  //   }
-  // }
 
   console.log(legalmoves);
 }
