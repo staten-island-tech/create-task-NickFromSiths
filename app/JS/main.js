@@ -151,8 +151,9 @@ let legalmoves = [];
 
 let historyoriginal = [];
 let historytarget = [];
-let previousoriginal = historyoriginal[historyoriginal.length - 2];
-let previoustarget = historytarget[historytarget.length - 2];
+
+let previousoriginal = [];
+let previoustarget = [];
 
 function drop(event) {
   event.preventDefault();
@@ -168,9 +169,13 @@ function drop(event) {
     turn++;
     historyoriginal.push(originalsquare);
     historytarget.push(target.id);
-    console.log(historyoriginal, historytarget);
 
-    console.log(previousoriginal);
+    previousoriginal = [];
+    previousoriginal.push(historyoriginal[historyoriginal.length - 2]);
+    previoustarget = [];
+    previoustarget.push(historytarget[historytarget.length - 2]);
+
+    console.log(historyoriginal, historytarget, "history");
   }
   //after computing legal moves delete target.id and move it out of drop()
 
@@ -191,6 +196,7 @@ function drop(event) {
             }
             //---------------------------------
             piecelogic();
+            console.log(previousoriginal, previoustarget, "1bfgiuoyy");
           } else {
             console.log(target.id, "contains same piece color");
           }
@@ -215,6 +221,7 @@ function drop(event) {
             }
             //---------------------------------
             piecelogic();
+            console.log(previousoriginal, previoustarget, "1bfgiuoyy");
           } else {
             console.log(target.id, "contains same piece color");
           }
@@ -232,7 +239,6 @@ function drop(event) {
 
 function wpawn(target, original) {
   legalmoves = [];
-  console.log(previousoriginal);
 
   const r = parseInt(original.charAt(1));
   const f = parseInt(original.charAt(2));
@@ -275,8 +281,7 @@ function wpawn(target, original) {
   });
   //en passant (add move by up by 2 rule with the previous... data)
   //    possible best place for that is in if(f === 5 && ....){}\
-
-  if (previousoriginal !== undefined && previoustarget !== undefined) {
+  if (previousoriginal.length > 1 && previoustarget > 1) {
     const pfo = parseInt(previousoriginal.charAt(2));
     const pft = parseInt(previoustarget.charAt(2));
     let test = pfo - pft;
@@ -306,7 +311,6 @@ function wpawn(target, original) {
       }
     }
   }
-
   console.log(legalmoves);
 }
 //BLACK PAWN
@@ -351,14 +355,35 @@ function bpawn(target, original) {
       legalmoves.push(newid1);
     }
   });
-
-  if (f === 4) {
-    const adjacent = `#x${r}${f + 1}`;
-    const adjacentPiece = document.querySelector(adjacent);
-    if (adjacentPiece && adjacentPiece.firstElementChild) {
-      legalmoves.push(adjacent); // Add en passant move if conditions are met
+  if (previousoriginal.length > 1 && previoustarget > 1) {
+    const pfo = parseInt(previousoriginal.charAt(2));
+    const pft = parseInt(previoustarget.charAt(2));
+    let test = pfo - pft;
+    console.log(pfo, "pfo");
+    console.log(pft, "pft");
+    console.log(test, "test");
+    if (f === 4 && test === 2) {
+      if (document.querySelector(`#x${r - 1}${f}`)) {
+        const adjacent = `#x${r - 1}${f}`;
+        const adjacentPiece = document.querySelector(adjacent);
+        if (adjacentPiece && adjacentPiece.firstElementChild) {
+          legalmoves.push(`#x${r - 1}${f + 1}`);
+          if (target && legalmoves.includes(`#${target}`)) {
+            adjacentPiece.innerHTML = "";
+          }
+        }
+      }
+      if (document.querySelector(`#x${r + 1}${f}`)) {
+        const adjacent = `#x${r + 1}${f}`;
+        const adjacentPiece = document.querySelector(adjacent);
+        if (adjacentPiece && adjacentPiece.firstElementChild) {
+          legalmoves.push(`#x${r + 1}${f + 1}`);
+          if (target && legalmoves.includes(`#${target}`)) {
+            adjacentPiece.innerHTML = "";
+          }
+        }
+      }
     }
   }
-
   console.log(legalmoves);
 }
