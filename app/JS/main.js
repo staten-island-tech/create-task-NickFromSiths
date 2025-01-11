@@ -131,9 +131,31 @@ piece.forEach((element) => {
 
 let originalsquare = null;
 
+let legalmoves = [];
+
+let historyoriginal = [];
+let historytarget = [];
+
+let test = 0;
+
+let turn = 0;
+
 function drag(event) {
   originalsquare = event.target.parentElement.id;
   event.dataTransfer.setData("text", event.target.id);
+
+  legalmoves = [];
+
+  const target = event.currentTarget;
+  if (event.target.classList.contains("whitepiece")) {
+    wpawn(target.id, originalsquare, test);
+    console.log("Turn:", turn + 1);
+    console.log("Legal moves:", legalmoves);
+  } else if (event.target.classList.contains("piece")) {
+    bpawn(target.id, originalsquare, test);
+    console.log("Turn:", turn + 1);
+    console.log("Legal moves:", legalmoves);
+  }
 }
 
 squares.forEach((element) => {
@@ -145,37 +167,18 @@ function dragover(event) {
   event.preventDefault();
 }
 
-let turn = 0;
-
-let legalmoves = [];
-
-let historyoriginal = [];
-let historytarget = [];
-
-let previousoriginal = [];
-let previoustarget = [];
-
 function drop(event) {
   event.preventDefault();
   const piece = document.getElementById(event.dataTransfer.getData("text"));
   const target = event.currentTarget;
 
   function piecelogic() {
-    console.log(turn + 1);
-    console.log("from", originalsquare);
-    console.log("to", target.id);
+    console.log("From", originalsquare, "to", target.id);
     target.innerHTML = "";
     target.appendChild(piece);
     turn++;
     historyoriginal.push(originalsquare);
     historytarget.push(target.id);
-
-    previousoriginal = [];
-    previousoriginal.push(historyoriginal[historyoriginal.length - 2]);
-    previoustarget = [];
-    previoustarget.push(historytarget[historytarget.length - 2]);
-
-    console.log(historyoriginal, historytarget, "history");
   }
   //after computing legal moves delete target.id and move it out of drop()
 
@@ -196,7 +199,6 @@ function drop(event) {
             }
             //---------------------------------
             piecelogic();
-            console.log(previousoriginal, previoustarget, "1bfgiuoyy");
           } else {
             console.log(target.id, "contains same piece color");
           }
@@ -221,7 +223,6 @@ function drop(event) {
             }
             //---------------------------------
             piecelogic();
-            console.log(previousoriginal, previoustarget, "1bfgiuoyy");
           } else {
             console.log(target.id, "contains same piece color");
           }
@@ -237,153 +238,163 @@ function drop(event) {
 
 //WHITE PAWN
 
-function wpawn(target, original) {
+function wpawn(target, original, test) {
   legalmoves = [];
+  let xvalue = 0;
+  if (historyoriginal.length > 0 && historytarget.length > 0) {
+    const previousOriginal = historyoriginal[historyoriginal.length - 1];
+    const previousTarget = historytarget[historytarget.length - 1];
 
-  const r = parseInt(original.charAt(1));
-  const f = parseInt(original.charAt(2));
-  //console.log("parsed ", r, f);
+    if (
+      previousOriginal &&
+      previousOriginal.length > 2 &&
+      previousTarget &&
+      previousTarget.length > 2
+    ) {
+      xvalue = parseInt(previousOriginal.charAt(1));
+      const pfo = parseInt(previousOriginal.charAt(2));
+      const pft = parseInt(previousTarget.charAt(2));
 
-  const move1 = [{ r: r, f: f + 1 }];
-  const move2 = [{ r: r, f: f + 2 }];
+      test = pfo - pft;
+    }
+  }
+
+  const x = parseInt(original.charAt(1));
+  const y = parseInt(original.charAt(2));
+
+  const move1 = [{ x: x, y: y + 1 }];
+  const move2 = [{ x: x, y: y + 2 }];
   const captures = [
-    { r: r + 1, f: f + 1 },
-    { r: r - 1, f: f + 1 },
+    { x: x + 1, y: y + 1 },
+    { x: x - 1, y: y + 1 },
   ];
 
-  move1.forEach(({ r, f }) => {
-    const newid = `#x${r}${f}`;
+  move1.forEach(({ x, y }) => {
+    const newid = `#x${x}${y}`;
     let cap = document.querySelector(newid);
-    //console.log(newid, "1");
     if (cap && !cap.firstElementChild) {
       legalmoves.push(newid);
     }
   });
-  //console.log(r, "r");
-  if (f < 3 && !document.querySelector(`#x${r}${f + 1}`).firstElementChild) {
-    move2.forEach(({ r, f }) => {
-      const newid = `#x${r}${f}`;
+  if (y < 3 && !document.querySelector(`#x${x}${y + 1}`).firstElementChild) {
+    move2.forEach(({ x, y }) => {
+      const newid = `#x${x}${y}`;
       let cap = document.querySelector(newid);
-      //console.log(newid, "1");
       if (cap && !cap.firstElementChild) {
         legalmoves.push(newid);
       }
     });
   }
 
-  captures.forEach(({ r, f }) => {
-    const newid1 = `#x${r}${f}`;
+  captures.forEach(({ x, y }) => {
+    const newid1 = `#x${x}${y}`;
     let cap = document.querySelector(newid1);
-    //console.log(newid1, "1");
     if (cap && cap.firstElementChild) {
       legalmoves.push(newid1);
     }
   });
-  //en passant (add move by up by 2 rule with the previous... data)
-  //    possible best place for that is in if(f === 5 && ....){}\
-  if (previousoriginal.length > 1 && previoustarget > 1) {
-    const pfo = parseInt(previousoriginal.charAt(2));
-    const pft = parseInt(previoustarget.charAt(2));
-    let test = pfo - pft;
-    console.log(pfo, "pfo");
-    console.log(pft, "pft");
-    console.log(test, "test");
-    if (f === 5 && test === 2) {
-      if (document.querySelector(`#x${r - 1}${f}`)) {
-        const adjacent = `#x${r - 1}${f}`;
-        const adjacentPiece = document.querySelector(adjacent);
-        if (adjacentPiece && adjacentPiece.firstElementChild) {
-          legalmoves.push(`#x${r - 1}${f + 1}`);
-          if (target && legalmoves.includes(`#${target}`)) {
-            adjacentPiece.innerHTML = "";
-          }
+
+  if (y === 5 && test === 2) {
+    if (document.querySelector(`#x${x - 1}${y}`) && x - 1 === xvalue) {
+      const adjacent = `#x${x - 1}${y}`;
+      const adjacentPiece = document.querySelector(adjacent);
+      if (adjacentPiece && adjacentPiece.firstElementChild) {
+        legalmoves.push(`#x${x - 1}${y + 1}`);
+        if (target && legalmoves.includes(`#${target}`)) {
+          adjacentPiece.innerHTML = "";
         }
       }
-      if (document.querySelector(`#x${r + 1}${f}`)) {
-        const adjacent = `#x${r + 1}${f}`;
-        const adjacentPiece = document.querySelector(adjacent);
-        if (adjacentPiece && adjacentPiece.firstElementChild) {
-          legalmoves.push(`#x${r + 1}${f + 1}`);
-          if (target && legalmoves.includes(`#${target}`)) {
-            adjacentPiece.innerHTML = "";
-          }
+    }
+    if (document.querySelector(`#x${x + 1}${y}`) && x + 1 === xvalue) {
+      const adjacent = `#x${x + 1}${y}`;
+      const adjacentPiece = document.querySelector(adjacent);
+      if (adjacentPiece && adjacentPiece.firstElementChild) {
+        legalmoves.push(`#x${x + 1}${y + 1}`);
+        if (target && legalmoves.includes(`#${target}`)) {
+          adjacentPiece.innerHTML = "";
         }
       }
     }
   }
-  console.log(legalmoves);
 }
 //BLACK PAWN
-function bpawn(target, original) {
+function bpawn(target, original, test) {
   legalmoves = [];
+  let xvalue = 0;
+  if (historyoriginal.length > 0 && historytarget.length > 0) {
+    const previousOriginal = historyoriginal[historyoriginal.length - 1];
+    const previousTarget = historytarget[historytarget.length - 1];
 
-  const r = parseInt(original.charAt(1));
-  const f = parseInt(original.charAt(2));
+    if (
+      previousOriginal &&
+      previousOriginal.length > 2 &&
+      previousTarget &&
+      previousTarget.length > 2
+    ) {
+      xvalue = parseInt(previousOriginal.charAt(1));
+      const pfo = parseInt(previousOriginal.charAt(2)); // Access the correct index
+      const pft = parseInt(previousTarget.charAt(2)); // Access the correct index
 
-  const move1 = [{ r: r, f: f - 1 }];
-  const move2 = [{ r: r, f: f - 2 }];
+      test = pfo - pft;
+    }
+  }
+
+  const x = parseInt(original.charAt(1));
+  const y = parseInt(original.charAt(2));
+
+  const move1 = [{ x: x, y: y - 1 }];
+  const move2 = [{ x: x, y: y - 2 }];
   const captures = [
-    { r: r + 1, f: f - 1 },
-    { r: r - 1, f: f - 1 },
+    { x: x + 1, y: y - 1 },
+    { x: x - 1, y: y - 1 },
   ];
 
-  move1.forEach(({ r, f }) => {
-    const newid = `#x${r}${f}`;
+  move1.forEach(({ x, y }) => {
+    const newid = `#x${x}${y}`;
     let cap = document.querySelector(newid);
-    //console.log(newid, "1");
     if (cap && !cap.firstElementChild) {
       legalmoves.push(newid);
     }
   });
 
-  if (f > 6 && !document.querySelector(`#x${r}${f - 1}`).firstElementChild) {
-    move2.forEach(({ r, f }) => {
-      const newid = `#x${r}${f}`;
+  if (y > 6 && !document.querySelector(`#x${x}${y - 1}`).firstElementChild) {
+    move2.forEach(({ x, y }) => {
+      const newid = `#x${x}${y}`;
       let cap = document.querySelector(newid);
-      //console.log(newid, "1");
       if (cap && !cap.firstElementChild) {
         legalmoves.push(newid);
       }
     });
   }
 
-  captures.forEach(({ r, f }) => {
-    const newid1 = `#x${r}${f}`;
+  captures.forEach(({ x, y }) => {
+    const newid1 = `#x${x}${y}`;
     let cap = document.querySelector(newid1);
-    //console.log(newid1, "1");
     if (cap && cap.firstElementChild) {
       legalmoves.push(newid1);
     }
   });
-  if (previousoriginal.length > 1 && previoustarget > 1) {
-    const pfo = parseInt(previousoriginal.charAt(2));
-    const pft = parseInt(previoustarget.charAt(2));
-    let test = pfo - pft;
-    console.log(pfo, "pfo");
-    console.log(pft, "pft");
-    console.log(test, "test");
-    if (f === 4 && test === 2) {
-      if (document.querySelector(`#x${r - 1}${f}`)) {
-        const adjacent = `#x${r - 1}${f}`;
-        const adjacentPiece = document.querySelector(adjacent);
-        if (adjacentPiece && adjacentPiece.firstElementChild) {
-          legalmoves.push(`#x${r - 1}${f + 1}`);
-          if (target && legalmoves.includes(`#${target}`)) {
-            adjacentPiece.innerHTML = "";
-          }
+
+  if (y === 4 && test === -2) {
+    if (document.querySelector(`#x${x - 1}${y}`) && x - 1 === xvalue) {
+      const adjacent = `#x${x - 1}${y}`;
+      const adjacentPiece = document.querySelector(adjacent);
+      if (adjacentPiece && adjacentPiece.firstElementChild) {
+        legalmoves.push(`#x${x - 1}${y - 1}`);
+        if (target && legalmoves.includes(`#${target}`)) {
+          adjacentPiece.innerHTML = "";
         }
       }
-      if (document.querySelector(`#x${r + 1}${f}`)) {
-        const adjacent = `#x${r + 1}${f}`;
-        const adjacentPiece = document.querySelector(adjacent);
-        if (adjacentPiece && adjacentPiece.firstElementChild) {
-          legalmoves.push(`#x${r + 1}${f + 1}`);
-          if (target && legalmoves.includes(`#${target}`)) {
-            adjacentPiece.innerHTML = "";
-          }
+    }
+    if (document.querySelector(`#x${x + 1}${y}`) && x + 1 === xvalue) {
+      const adjacent = `#x${x + 1}${y}`;
+      const adjacentPiece = document.querySelector(adjacent);
+      if (adjacentPiece && adjacentPiece.firstElementChild) {
+        legalmoves.push(`#x${x + 1}${y - 1}`);
+        if (target && legalmoves.includes(`#${target}`)) {
+          adjacentPiece.innerHTML = "";
         }
       }
     }
   }
-  console.log(legalmoves);
 }

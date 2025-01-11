@@ -61,6 +61,60 @@ if (f === 5) {
   }
 }
 
+//WHITE EN PASSANT
+
+if (y === 5 && test === 2) {
+  if (document.querySelector(`#x${x - 1}${y}`) && x - 1 === xvalue) {
+    const adjacent = `#x${x - 1}${y}`;
+    const adjacentPiece = document.querySelector(adjacent);
+    if (adjacentPiece && adjacentPiece.firstElementChild) {
+      legalmoves.push(`#x${x - 1}${y + 1}`);
+      if (target && legalmoves.includes(`#${target}`)) {
+        adjacentPiece.innerHTML = "";
+      }
+    }
+  }
+  if (document.querySelector(`#x${x + 1}${y}`) && x + 1 === xvalue) {
+    const adjacent = `#x${x + 1}${y}`;
+    const adjacentPiece = document.querySelector(adjacent);
+    if (adjacentPiece && adjacentPiece.firstElementChild) {
+      legalmoves.push(`#x${x + 1}${y + 1}`);
+      if (target && legalmoves.includes(`#${target}`)) {
+        adjacentPiece.innerHTML = "";
+      }
+    }
+  }
+}
+
+///BLACK EN PASSANT doesnt delete passanted white pawn for some reason???????
+
+if (y === 4 && test === -2) {
+  if (document.querySelector(`#x${x - 1}${y}`) && x - 1 === xvalue) {
+    const adjacent = `#x${x - 1}${y}`;
+    const adjacentPiece = document.querySelector(adjacent);
+    if (adjacentPiece && adjacentPiece.firstElementChild) {
+      legalmoves.push(`#x${x - 1}${y - 1}`);
+      if (target && legalmoves.includes(`#${target}`)) {
+        adjacentPiece.innerHTML = "";
+        console.log(adjacent);
+      }
+    }
+  }
+  if (document.querySelector(`#x${x + 1}${y}`) && x + 1 === xvalue) {
+    const adjacent = `#x${x + 1}${y}`;
+    const adjacentPiece = document.querySelector(adjacent);
+
+    if (adjacentPiece && adjacentPiece.firstElementChild) {
+      console.log(adjacentPiece, "uhh");
+      legalmoves.push(`#x${x + 1}${y - 1}`);
+      if (target.id && legalmoves.includes(`${target.id}`)) {
+        document.querySelector(adjacent).innerHTML = "";
+        console.log(adjacentPiece, "remove???");
+      }
+    }
+  }
+}
+
 // && target.includes(".piece")
 
 //tests
