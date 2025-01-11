@@ -115,7 +115,171 @@ if (y === 4 && test === -2) {
   }
 }
 
+if (document.querySelector(`#x${x}${y}`)) {
+  const pieceOnSquare = document.querySelector(`#x${x}${y}`).firstElementChild;
+
+  // If the square is empty, add it to legal moves
+  if (!pieceOnSquare) {
+    legalmoves.push(`#x${x}${y}`);
+  }
+  // If the square contains an opponent's piece, add it to legal moves and break
+  else if (pieceOnSquare.id.charAt(0) !== pieceid.charAt(0)) {
+    legalmoves.push(`#x${x}${y}`);
+    // break; // Stop after capturing an opponent's piece
+  }
+  // If the square contains a piece of the same color, stop moving
+  else {
+    // break;
+  }
+}
 // && target.includes(".piece")
+
+//THE ONLY GPT RESPONSE THAT WORKS FOR BISHOP
+
+function bishop(target, original, pieceid) {
+  legalmoves = [];
+
+  const x = parseInt(original.charAt(1)); // x-coordinate of the original square
+  const y = parseInt(original.charAt(2)); // y-coordinate of the original square
+
+  // Directions for the bishop (diagonals)
+  const directions = [
+    { dx: 1, dy: 1 }, // Top-right diagonal
+    { dx: -1, dy: 1 }, // Top-left diagonal
+    { dx: 1, dy: -1 }, // Bottom-right diagonal
+    { dx: -1, dy: -1 }, // Bottom-left diagonal
+  ];
+
+  // Loop through all 4 diagonal directions
+  directions.forEach(({ dx, dy }) => {
+    let i = 1; // Distance from the original position
+
+    // Check squares in this direction
+    while (true) {
+      const newX = x + i * dx;
+      const newY = y + i * dy;
+
+      // Stop if out of bounds (we check both x and y coordinates)
+      if (newX < 1 || newY < 1 || newX > 8 || newY > 8) {
+        break;
+      }
+
+      const newid = `#x${newX}${newY}`;
+      let cap = document.querySelector(newid);
+
+      // If the square is empty, it's a legal move
+      if (cap && !cap.firstElementChild) {
+        legalmoves.push(newid);
+      }
+      // If the square contains an opponent's piece, it's a legal move (capture)
+      else if (
+        cap &&
+        cap.firstElementChild &&
+        cap.firstElementChild.id.charAt(0) !== pieceid.charAt(0)
+      ) {
+        legalmoves.push(newid); // Capture the opponent's piece
+        break; // Stop moving in this direction after capturing
+      }
+      // If the square contains a piece of the same color, stop in this direction
+      else if (
+        cap &&
+        cap.firstElementChild &&
+        cap.firstElementChild.id.charAt(0) === pieceid.charAt(0)
+      ) {
+        break; // Cannot move past a friendly piece
+      }
+
+      i++; // Move to the next square in the current direction
+    }
+  });
+}
+
+//tried to make bishop function but did not work-------------------------------------------------------------
+function bishop(target, original, pieceid) {
+  legalmoves = [];
+
+  const x = parseInt(original.charAt(1));
+  const y = parseInt(original.charAt(2));
+
+  let i = 1;
+
+  while (i < 8) {
+    if (document.querySelector(`#x${x + i}${y + i}`)) {
+      const adjacent = `#x${x + i}${y + i}`;
+      const adjacentPiece = document.querySelector(adjacent);
+
+      if (adjacentPiece && !adjacentPiece.firstElementChild) {
+        legalmoves.push(`#x${x + i}${y + i}`);
+        i++;
+      } else if (
+        adjacentPiece.firstElementChild.id.charAt(0) !== pieceid.charAt(0)
+      ) {
+        legalmoves.push(`#x${x + i}${y + i}`);
+        break;
+      } else {
+        break;
+      }
+    }
+    break;
+  }
+  while (i < 8) {
+    if (document.querySelector(`#x${x - i}${y - i}`)) {
+      const adjacent = `#x${x - i}${y - i}`;
+      const adjacentPiece = document.querySelector(adjacent);
+
+      if (adjacentPiece && !adjacentPiece.firstElementChild) {
+        legalmoves.push(`#x${x - i}${y - i}`);
+        i++;
+      } else if (
+        adjacentPiece.firstElementChild.id.charAt(0) !== pieceid.charAt(0)
+      ) {
+        legalmoves.push(`#x${x - i}${y - i}`);
+        break;
+      } else {
+        break;
+      }
+    }
+    break;
+  }
+  while (i < 8) {
+    if (document.querySelector(`#x${x - i}${y + i}`)) {
+      const adjacent = `#x${x - i}${y + i}`;
+      const adjacentPiece = document.querySelector(adjacent);
+
+      if (adjacentPiece && !adjacentPiece.firstElementChild) {
+        legalmoves.push(`#x${x - i}${y + i}`);
+        i++;
+      } else if (
+        adjacentPiece.firstElementChild.id.charAt(0) !== pieceid.charAt(0)
+      ) {
+        legalmoves.push(`#x${x - i}${y + i}`);
+        break;
+      } else {
+        break;
+      }
+    }
+    break;
+  }
+  while (i < 8) {
+    if (document.querySelector(`#x${x + i}${y - i}`)) {
+      const adjacent = `#x${x + i}${y - i}`;
+      const adjacentPiece = document.querySelector(adjacent);
+
+      if (adjacentPiece && !adjacentPiece.firstElementChild) {
+        legalmoves.push(`#x${x + i}${y - i}`);
+        i++;
+      } else if (
+        adjacentPiece.firstElementChild.id.charAt(0) !== pieceid.charAt(0)
+      ) {
+        legalmoves.push(`#x${x + i}${y - i}`);
+        break;
+      } else {
+        break;
+      }
+    }
+    break;
+  }
+}
 
 //tests
 

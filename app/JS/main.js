@@ -131,6 +131,8 @@ piece.forEach((element) => {
 
 let originalsquare = null;
 
+let originalpiece = null;
+
 let legalmoves = [];
 
 let historyoriginal = [];
@@ -143,16 +145,49 @@ let turn = 0;
 function drag(event) {
   originalsquare = event.target.parentElement.id;
   event.dataTransfer.setData("text", event.target.id);
-
+  originalpiece = event.target.parentElement;
   legalmoves = [];
 
   const target = event.currentTarget;
-  if (event.target.classList.contains("whitepiece")) {
+
+  console.log(originalsquare);
+
+  const pieceid = event.target.parentElement.firstElementChild.id;
+  const secondletter = pieceid.charAt(1);
+
+  console.log(pieceid);
+  console.log(secondletter);
+  if (event.target.classList.contains("whitepiece") && secondletter === "p") {
     wpawn(target.id, originalsquare, test);
     console.log("Turn:", turn + 1);
     console.log("Legal moves:", legalmoves);
-  } else if (event.target.classList.contains("piece")) {
+  } else if (event.target.classList.contains("piece") && secondletter === "p") {
     bpawn(target.id, originalsquare, test);
+    console.log("Turn:", turn + 1);
+    console.log("Legal moves:", legalmoves);
+  }
+  if (secondletter === "k") {
+    knight(target.id, originalsquare, pieceid);
+    console.log("Turn:", turn + 1);
+    console.log("Legal moves:", legalmoves);
+  }
+  if (secondletter === "b") {
+    bishop(target.id, originalsquare, pieceid);
+    console.log("Turn:", turn + 1);
+    console.log("Legal moves:", legalmoves);
+  }
+  if (secondletter === "r") {
+    rook(target.id, originalsquare, pieceid);
+    console.log("Turn:", turn + 1);
+    console.log("Legal moves:", legalmoves);
+  }
+  if (secondletter === "q") {
+    queen(target.id, originalsquare, pieceid);
+    console.log("Turn:", turn + 1);
+    console.log("Legal moves:", legalmoves);
+  }
+  if (secondletter === "K") {
+    king(target.id, originalsquare, pieceid);
     console.log("Turn:", turn + 1);
     console.log("Legal moves:", legalmoves);
   }
@@ -185,7 +220,11 @@ function drop(event) {
   if (turn % 2 === 0) {
     if (piece.className === "whitepiece") {
       if (target.id !== originalsquare) {
-        wpawn(target.id, originalsquare);
+        const pieceid = originalpiece.firstElementChild;
+        const secondletter = pieceid.id.charAt(1);
+        if (pieceid.classList.contains("whitepiece") && secondletter === "p") {
+          wpawn(target.id, originalsquare);
+        }
         //legal moves
         if (legalmoves.includes(`#${target.id}`)) {
           const squarechild = target.firstElementChild;
@@ -210,7 +249,11 @@ function drop(event) {
   } else if (turn % 2 != 0) {
     if (piece.className === "piece") {
       if (target.id !== originalsquare) {
-        bpawn(target.id, originalsquare);
+        const pieceid = originalpiece.firstElementChild;
+        const secondletter = pieceid.id.charAt(1);
+        if (pieceid.classList.contains("piece") && secondletter === "p") {
+          bpawn(target.id, originalsquare);
+        }
         if (legalmoves.includes(`#${target.id}`)) {
           const squarechild = target.firstElementChild;
           if (!squarechild || !squarechild.classList.contains("piece")) {
@@ -235,8 +278,6 @@ function drop(event) {
 }
 
 // -------Legal Move Computation
-
-//WHITE PAWN
 
 function wpawn(target, original, test) {
   legalmoves = [];
@@ -317,7 +358,6 @@ function wpawn(target, original, test) {
     }
   }
 }
-//BLACK PAWN
 function bpawn(target, original, test) {
   legalmoves = [];
   let xvalue = 0;
@@ -397,4 +437,225 @@ function bpawn(target, original, test) {
       }
     }
   }
+}
+function knight(target, original, pieceid) {
+  legalmoves = [];
+
+  const x = parseInt(original.charAt(1));
+  const y = parseInt(original.charAt(2));
+
+  const move = [
+    { x: x + 1, y: y + 2 },
+    { x: x - 1, y: y + 2 },
+    { x: x + 1, y: y - 2 },
+    { x: x - 1, y: y - 2 },
+    { x: x + 2, y: y + 1 },
+    { x: x - 2, y: y + 1 },
+    { x: x + 2, y: y - 1 },
+    { x: x - 2, y: y - 1 },
+  ];
+
+  move.forEach(({ x, y }) => {
+    const newid = `#x${x}${y}`;
+    let cap = document.querySelector(newid);
+    if (cap && !cap.firstElementChild) {
+      legalmoves.push(newid);
+    }
+    if (
+      cap &&
+      cap.firstElementChild &&
+      cap.firstElementChild.id.charAt(0) != pieceid.charAt(0)
+    ) {
+      legalmoves.push(newid);
+    }
+  });
+}
+//bishop
+function bishop(target, original, pieceid) {
+  legalmoves = [];
+
+  const x = parseInt(original.charAt(1)); // x-coordinate of the original square
+  const y = parseInt(original.charAt(2)); // y-coordinate of the original square
+
+  // Directions for the bishop (diagonals)
+  const directions = [
+    { dx: 1, dy: 1 }, // Top-right diagonal
+    { dx: -1, dy: 1 }, // Top-left diagonal
+    { dx: 1, dy: -1 }, // Bottom-right diagonal
+    { dx: -1, dy: -1 }, // Bottom-left diagonal
+  ];
+
+  // Loop through all 4 diagonal directions
+  directions.forEach(({ dx, dy }) => {
+    let i = 1; // Distance from the original position
+
+    while (i < 8) {
+      const newX = x + i * dx;
+      const newY = y + i * dy;
+
+      // Stop if out of bounds (we check both x and y coordinates)
+      if (newX < 1 || newY < 1 || newX > 8 || newY > 8) {
+        break;
+      }
+
+      const newid = `#x${newX}${newY}`;
+      let cap = document.querySelector(newid);
+
+      // If the square is empty, it's a legal move
+      if (cap && !cap.firstElementChild) {
+        legalmoves.push(newid);
+      }
+      // If the square contains an opponent's piece, it's a legal move (capture)
+      else if (
+        cap &&
+        cap.firstElementChild &&
+        cap.firstElementChild.id.charAt(0) !== pieceid.charAt(0)
+      ) {
+        legalmoves.push(newid); // Capture the opponent's piece
+        break; // Stop moving in this direction after capturing
+      }
+      // If the square contains a piece of the same color, stop in this direction
+      else if (
+        cap &&
+        cap.firstElementChild &&
+        cap.firstElementChild.id.charAt(0) === pieceid.charAt(0)
+      ) {
+        break; // Cannot move past a friendly piece
+      }
+
+      i++; // Move to the next square in the current direction
+    }
+  });
+}
+function rook(target, original, pieceid) {
+  legalmoves = [];
+
+  const x = parseInt(original.charAt(1));
+  const y = parseInt(original.charAt(2));
+
+  const directions = [
+    { dx: 0, dy: 1 },
+    { dx: 0, dy: -1 },
+    { dx: 1, dy: 0 },
+    { dx: -1, dy: 0 },
+  ];
+
+  directions.forEach(({ dx, dy }) => {
+    let i = 1;
+
+    while (i < 8) {
+      const newX = x + i * dx;
+      const newY = y + i * dy;
+
+      if (newX < 1 || newY < 1 || newX > 8 || newY > 8) {
+        break;
+      }
+
+      const newid = `#x${newX}${newY}`;
+      let cap = document.querySelector(newid);
+
+      if (cap && !cap.firstElementChild) {
+        legalmoves.push(newid);
+      } else if (
+        cap &&
+        cap.firstElementChild &&
+        cap.firstElementChild.id.charAt(0) !== pieceid.charAt(0)
+      ) {
+        legalmoves.push(newid);
+        break;
+      } else if (
+        cap &&
+        cap.firstElementChild &&
+        cap.firstElementChild.id.charAt(0) === pieceid.charAt(0)
+      ) {
+        break;
+      }
+
+      i++;
+    }
+  });
+}
+function queen(target, original, pieceid) {
+  legalmoves = [];
+
+  const x = parseInt(original.charAt(1));
+  const y = parseInt(original.charAt(2));
+
+  const directions = [
+    { dx: 0, dy: 1 },
+    { dx: 0, dy: -1 },
+    { dx: 1, dy: 0 },
+    { dx: -1, dy: 0 },
+    { dx: 1, dy: 1 },
+    { dx: -1, dy: 1 },
+    { dx: 1, dy: -1 },
+    { dx: -1, dy: -1 },
+  ];
+
+  directions.forEach(({ dx, dy }) => {
+    let i = 1;
+
+    while (i < 8) {
+      const newX = x + i * dx;
+      const newY = y + i * dy;
+
+      if (newX < 1 || newY < 1 || newX > 8 || newY > 8) {
+        break;
+      }
+
+      const newid = `#x${newX}${newY}`;
+      let cap = document.querySelector(newid);
+
+      if (cap && !cap.firstElementChild) {
+        legalmoves.push(newid);
+      } else if (
+        cap &&
+        cap.firstElementChild &&
+        cap.firstElementChild.id.charAt(0) !== pieceid.charAt(0)
+      ) {
+        legalmoves.push(newid);
+        break;
+      } else if (
+        cap &&
+        cap.firstElementChild &&
+        cap.firstElementChild.id.charAt(0) === pieceid.charAt(0)
+      ) {
+        break;
+      }
+
+      i++;
+    }
+  });
+}
+function king(target, original, pieceid) {
+  legalmoves = [];
+
+  const x = parseInt(original.charAt(1));
+  const y = parseInt(original.charAt(2));
+
+  const move = [
+    { x: x + 1, y: y }, //right
+    { x: x - 1, y: y }, //left
+    { x: x, y: y + 1 }, //up
+    { x: x, y: y - 1 }, //down
+    { x: x + 1, y: y + 1 }, //right & up
+    { x: x - 1, y: y - 1 }, //left & down
+    { x: x + 1, y: y - 1 }, //right & down
+    { x: x - 1, y: y + 1 }, //left & up
+  ];
+
+  move.forEach(({ x, y }) => {
+    const newid = `#x${x}${y}`;
+    let cap = document.querySelector(newid);
+    if (cap && !cap.firstElementChild) {
+      legalmoves.push(newid);
+    }
+    if (
+      cap &&
+      cap.firstElementChild &&
+      cap.firstElementChild.id.charAt(0) != pieceid.charAt(0)
+    ) {
+      legalmoves.push(newid);
+    }
+  });
 }
