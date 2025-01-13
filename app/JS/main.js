@@ -1,5 +1,4 @@
 import "../css/style.css";
-import { chessPieces } from "./pieces.js";
 import { chessPiecesImg } from "./pieces.js";
 
 const DOMSelectors = {
@@ -120,8 +119,6 @@ function resetboard() {
 }
 resetboard();
 
-// moving squares -------------------------------------------------------------------------------
-
 const piece = document.querySelectorAll(".piece, .whitepiece");
 const squares = document.querySelectorAll(".square, .square1");
 
@@ -215,7 +212,6 @@ function drop(event) {
     historyoriginal.push(originalsquare);
     historytarget.push(target.id);
   }
-  //after computing legal moves delete target.id and move it out of drop()
 
   if (turn % 2 === 0) {
     if (piece.className === "whitepiece") {
@@ -225,18 +221,17 @@ function drop(event) {
         if (pieceid.classList.contains("whitepiece") && secondletter === "p") {
           wpawn(target.id, originalsquare);
         }
-        //legal moves
+
         if (legalmoves.includes(`#${target.id}`)) {
           const squarechild = target.firstElementChild;
           if (!squarechild || !squarechild.classList.contains("whitepiece")) {
-            //detecting captures in console (not needed)----------------------------
             const captured = Array.from(target.children); //
             if (squarechild) {
               if (squarechild.classList.contains("piece")) {
                 console.log(captured, "black piece captured");
               }
             }
-            //---------------------------------
+
             piecelogic();
           } else {
             console.log(target.id, "contains same piece color");
@@ -257,7 +252,6 @@ function drop(event) {
         if (legalmoves.includes(`#${target.id}`)) {
           const squarechild = target.firstElementChild;
           if (!squarechild || !squarechild.classList.contains("piece")) {
-            //detecting captures in console (not needed)----------------------------
             const captured = Array.from(target.children); //
             if (squarechild) {
               if (squarechild.classList.contains("piece")) {
@@ -276,8 +270,6 @@ function drop(event) {
     }
   }
 }
-
-// -------Legal Move Computation
 
 function wpawn(target, original, test) {
   legalmoves = [];
@@ -372,8 +364,8 @@ function bpawn(target, original, test) {
       previousTarget.length > 2
     ) {
       xvalue = parseInt(previousOriginal.charAt(1));
-      const pfo = parseInt(previousOriginal.charAt(2)); // Access the correct index
-      const pft = parseInt(previousTarget.charAt(2)); // Access the correct index
+      const pfo = parseInt(previousOriginal.charAt(2));
+      const pft = parseInt(previousTarget.charAt(2));
 
       test = pfo - pft;
     }
@@ -474,26 +466,23 @@ function knight(target, original, pieceid) {
 function bishop(target, original, pieceid) {
   legalmoves = [];
 
-  const x = parseInt(original.charAt(1)); // x-coordinate of the original square
-  const y = parseInt(original.charAt(2)); // y-coordinate of the original square
+  const x = parseInt(original.charAt(1));
+  const y = parseInt(original.charAt(2));
 
-  // Directions for the bishop (diagonals)
   const directions = [
-    { dx: 1, dy: 1 }, // Top-right diagonal
-    { dx: -1, dy: 1 }, // Top-left diagonal
-    { dx: 1, dy: -1 }, // Bottom-right diagonal
-    { dx: -1, dy: -1 }, // Bottom-left diagonal
+    { dx: 1, dy: 1 },
+    { dx: -1, dy: 1 },
+    { dx: 1, dy: -1 },
+    { dx: -1, dy: -1 },
   ];
 
-  // Loop through all 4 diagonal directions
   directions.forEach(({ dx, dy }) => {
-    let i = 1; // Distance from the original position
+    let i = 1;
 
     while (i < 8) {
       const newX = x + i * dx;
       const newY = y + i * dy;
 
-      // Stop if out of bounds (we check both x and y coordinates)
       if (newX < 1 || newY < 1 || newX > 8 || newY > 8) {
         break;
       }
@@ -501,29 +490,24 @@ function bishop(target, original, pieceid) {
       const newid = `#x${newX}${newY}`;
       let cap = document.querySelector(newid);
 
-      // If the square is empty, it's a legal move
       if (cap && !cap.firstElementChild) {
         legalmoves.push(newid);
-      }
-      // If the square contains an opponent's piece, it's a legal move (capture)
-      else if (
+      } else if (
         cap &&
         cap.firstElementChild &&
         cap.firstElementChild.id.charAt(0) !== pieceid.charAt(0)
       ) {
-        legalmoves.push(newid); // Capture the opponent's piece
-        break; // Stop moving in this direction after capturing
-      }
-      // If the square contains a piece of the same color, stop in this direction
-      else if (
+        legalmoves.push(newid);
+        break;
+      } else if (
         cap &&
         cap.firstElementChild &&
         cap.firstElementChild.id.charAt(0) === pieceid.charAt(0)
       ) {
-        break; // Cannot move past a friendly piece
+        break;
       }
 
-      i++; // Move to the next square in the current direction
+      i++;
     }
   });
 }
@@ -634,14 +618,14 @@ function king(target, original, pieceid) {
   const y = parseInt(original.charAt(2));
 
   const move = [
-    { x: x + 1, y: y }, //right
-    { x: x - 1, y: y }, //left
-    { x: x, y: y + 1 }, //up
-    { x: x, y: y - 1 }, //down
-    { x: x + 1, y: y + 1 }, //right & up
-    { x: x - 1, y: y - 1 }, //left & down
-    { x: x + 1, y: y - 1 }, //right & down
-    { x: x - 1, y: y + 1 }, //left & up
+    { x: x + 1, y: y },
+    { x: x - 1, y: y },
+    { x: x, y: y + 1 },
+    { x: x, y: y - 1 },
+    { x: x + 1, y: y + 1 },
+    { x: x - 1, y: y - 1 },
+    { x: x + 1, y: y - 1 },
+    { x: x - 1, y: y + 1 },
   ];
 
   move.forEach(({ x, y }) => {
