@@ -146,14 +146,9 @@ function drag(event) {
   legalmoves = [];
 
   const target = event.currentTarget;
-
-  console.log(originalsquare);
-
   const pieceid = event.target.parentElement.firstElementChild.id;
   const secondletter = pieceid.charAt(1);
 
-  console.log(pieceid);
-  console.log(secondletter);
   if (event.target.classList.contains("whitepiece") && secondletter === "p") {
     wpawn(target.id, originalsquare, test);
     console.log("Turn:", turn + 1);
@@ -228,10 +223,9 @@ function drop(event) {
             const captured = Array.from(target.children); //
             if (squarechild) {
               if (squarechild.classList.contains("piece")) {
-                console.log(captured, "black piece captured");
+                console.log(captured, "Black Piece Captured");
               }
             }
-
             piecelogic();
           } else {
             console.log(target.id, "contains same piece color");
@@ -254,8 +248,8 @@ function drop(event) {
           if (!squarechild || !squarechild.classList.contains("piece")) {
             const captured = Array.from(target.children); //
             if (squarechild) {
-              if (squarechild.classList.contains("piece")) {
-                console.log(captured, "black piece captured");
+              if (squarechild.classList.contains("whitepiece")) {
+                console.log(captured, "White Piece Captured");
               }
             }
             //---------------------------------
@@ -462,7 +456,7 @@ function knight(target, original, pieceid) {
     }
   });
 }
-//bishop
+
 function bishop(target, original, pieceid) {
   legalmoves = [];
 
