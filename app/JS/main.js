@@ -145,7 +145,6 @@ function drag(event) {
   event.dataTransfer.setData("text", event.target.id);
   originalpiece = event.target.parentElement;
   legalmoves = [];
-  console.log(event.target, "why");
   const target = event.currentTarget;
   const pieceid = event.target.parentElement.firstElementChild.id;
   const secondletter = pieceid.charAt(1);
@@ -227,7 +226,7 @@ function drop(event) {
           }
           const squarechild = target.firstElementChild;
           if (!squarechild || !squarechild.classList.contains("whitepiece")) {
-            const captured = Array.from(target.children); //
+            const captured = Array.from(target.children);
             if (squarechild) {
               if (squarechild.classList.contains("piece")) {
                 console.log(captured, "Black Piece Captured");
@@ -265,7 +264,6 @@ function drop(event) {
                 console.log(captured, "White Piece Captured");
               }
             }
-            //---------------------------------
             piecelogic();
           } else {
             console.log(target.id, "contains same piece color");
