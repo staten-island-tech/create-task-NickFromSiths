@@ -127,13 +127,14 @@ piece.forEach((element) => {
 });
 
 let originalsquare = null;
-
 let originalpiece = null;
 
 let legalmoves = [];
-
 let historyoriginal = [];
 let historytarget = [];
+
+let wmovedking = false;
+let bmovedking = false;
 
 let test = 0;
 
@@ -144,7 +145,7 @@ function drag(event) {
   event.dataTransfer.setData("text", event.target.id);
   originalpiece = event.target.parentElement;
   legalmoves = [];
-
+  console.log(event.target, "why");
   const target = event.currentTarget;
   const pieceid = event.target.parentElement.firstElementChild.id;
   const secondletter = pieceid.charAt(1);
@@ -180,6 +181,7 @@ function drag(event) {
   }
   if (secondletter === "K") {
     king(target.id, originalsquare, pieceid);
+    castle(target.id, originalsquare, pieceid);
     console.log("Turn:", turn + 1);
     console.log("Legal moves:", legalmoves);
   }
@@ -216,8 +218,13 @@ function drop(event) {
         if (pieceid.classList.contains("whitepiece") && secondletter === "p") {
           wpawn(target.id, originalsquare);
         }
-
+        if (pieceid.classList.contains("whitepiece") && secondletter === "K") {
+          castle(target.id, originalsquare, pieceid.id);
+        }
         if (legalmoves.includes(`#${target.id}`)) {
+          if (originalpiece.firstElementChild.id.charAt(1) === "K") {
+            wmovedking = true;
+          }
           const squarechild = target.firstElementChild;
           if (!squarechild || !squarechild.classList.contains("whitepiece")) {
             const captured = Array.from(target.children); //
@@ -243,7 +250,13 @@ function drop(event) {
         if (pieceid.classList.contains("piece") && secondletter === "p") {
           bpawn(target.id, originalsquare);
         }
+        if (pieceid.classList.contains("piece") && secondletter === "K") {
+          castle(target.id, originalsquare, pieceid.id);
+        }
         if (legalmoves.includes(`#${target.id}`)) {
+          if (originalpiece.firstElementChild.id.charAt(1) === "K") {
+            bmovedking = true;
+          }
           const squarechild = target.firstElementChild;
           if (!squarechild || !squarechild.classList.contains("piece")) {
             const captured = Array.from(target.children); //
@@ -635,5 +648,82 @@ function king(target, original, pieceid) {
     ) {
       legalmoves.push(newid);
     }
+  });
+}
+function castle(target, original, pieceid) {
+  if (pieceid.charAt(0) === "w") {
+    if (wmovedking === false) {
+      if (
+        !document.querySelector("#x71").firstElementChild &&
+        !document.querySelector("#x61").firstElementChild
+      ) {
+        legalmoves.push("#x71");
+        if (target && legalmoves.includes(`#${target}`)) {
+          document.querySelector("#x81").innerHTML = "";
+          document
+            .querySelector("#x61")
+            .insertAdjacentHTML(
+              "beforeend",
+              `<img class="whitepiece" id="wr1" src="${chessPiecesImg.whiter}" draggable="true" alt="rook">`
+            );
+        }
+      }
+      if (
+        !document.querySelector("#x41").firstElementChild &&
+        !document.querySelector("#x31").firstElementChild &&
+        !document.querySelector("#x21").firstElementChild
+      ) {
+        legalmoves.push("#x31");
+        if (target && legalmoves.includes(`#${target}`)) {
+          document.querySelector("#x11").innerHTML = "";
+          document
+            .querySelector("#x41")
+            .insertAdjacentHTML(
+              "beforeend",
+              `<img class="whitepiece" id="wr0" src="${chessPiecesImg.whiter}" draggable="true" alt="rook">`
+            );
+        }
+      }
+    }
+  }
+  if (pieceid.charAt(0) === "b") {
+    if (bmovedking === false) {
+      if (
+        !document.querySelector("#x78").firstElementChild &&
+        !document.querySelector("#x68").firstElementChild
+      ) {
+        legalmoves.push("#x78");
+        if (target && legalmoves.includes(`#${target}`)) {
+          document.querySelector("#x88").innerHTML = "";
+          document
+            .querySelector("#x68")
+            .insertAdjacentHTML(
+              "beforeend",
+              `<img class="piece" id="br1" src="${chessPiecesImg.blackr}" draggable="true" alt="rook">`
+            );
+        }
+      }
+      if (
+        !document.querySelector("#x48").firstElementChild &&
+        !document.querySelector("#x38").firstElementChild &&
+        !document.querySelector("#x28").firstElementChild
+      ) {
+        legalmoves.push("#x38");
+        if (target && legalmoves.includes(`#${target}`)) {
+          document.querySelector("#x18").innerHTML = "";
+          document
+            .querySelector("#x48")
+            .insertAdjacentHTML(
+              "beforeend",
+              `<img class="piece" id="br0" src="${chessPiecesImg.blackr}" draggable="true" alt="rook">`
+            );
+        }
+      }
+    }
+  }
+  const reset = document.querySelectorAll(".whitepiece, .piece");
+  reset.forEach((rook) => {
+    rook.removeEventListener("dragstart", drag);
+    rook.addEventListener("dragstart", drag);
   });
 }
