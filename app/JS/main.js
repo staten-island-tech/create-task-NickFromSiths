@@ -725,3 +725,8 @@ function castle(target, original, pieceid) {
     rook.addEventListener("dragstart", drag);
   });
 }
+
+// Credits go to these videos for some parts of my code:
+// https://www.youtube.com/watch?v=5i9HNfKvrLU
+// https://www.youtube.com/watch?v=57bcXntM6SE
+// Also created with the help of Chat GPT
